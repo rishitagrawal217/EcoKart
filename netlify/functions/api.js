@@ -1,3 +1,4 @@
+const serverless = require('serverless-http');
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
@@ -57,6 +58,9 @@ const connectToDatabase = async () => {
   }
 };
 
+// Initialize database connection
+connectToDatabase();
+
 // Test endpoint
 app.get('/test', (req, res) => {
   res.json({ message: 'Netlify backend is working!' });
@@ -67,44 +71,4 @@ app.get('/', (req, res) => {
 });
 
 // Export as serverless function
-exports.handler = async (event, context) => {
-  await connectToDatabase();
-  
-  // Convert the event to a format Express can understand
-  const eventBuffer = Buffer.from(event.body || '', 'base64');
-  event.body = eventBuffer.toString('utf8');
-  
-  return new Promise((resolve, reject) => {
-    const server = require('http').createServer(app);
-    
-    server.on('request', (req, res) => {
-      req.headers = {
-        ...req.headers,
-        ...event.headers,
-        'x-forwarded-for': event.requestContext.identity.sourceIp,
-      };
-      
-      // Handle the request
-      app(req, res);
-    });
-    
-    server.emit('request', {
-      method: event.httpMethod,
-      url: event.path,
-      headers: event.headers,
-      body: event.body,
-    }, {
-      setHeader: (name, value) => {
-        if (!res.headers) res.headers = {};
-        res.headers[name.toLowerCase()] = value;
-      },
-      end: (body) => {
-        resolve({
-          statusCode: res.statusCode || 200,
-          headers: res.headers || {},
-          body: body,
-        });
-      },
-    });
-  });
-};
+module.exports.handler = serverless(app);
