@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import config from '../config';
 import './CartModal.css';
 
@@ -12,9 +12,9 @@ const CartModal = ({ isOpen, onClose, user, token, onCheckout }) => {
       setLoading(true);
       fetchCart();
     }
-  }, [isOpen, token]);
+  }, [isOpen, token, fetchCart]);
 
-  const fetchCart = async () => {
+  const fetchCart = useCallback(async () => {
     try {
       const response = await fetch(`${config.API_BASE_URL}/api/cart`, {
         headers: {
@@ -34,7 +34,7 @@ const CartModal = ({ isOpen, onClose, user, token, onCheckout }) => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [token]);
 
   const updateQuantity = async (itemId, quantity) => {
     try {

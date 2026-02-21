@@ -143,7 +143,7 @@ const CheckoutModal = ({ isOpen, onClose, user, token, cartItems, onOrderComplet
     if (isOpen && user) {
       calculateOrderSummary();
     }
-  }, [discountApplied, freeShippingApplied, forceUpdate, calculateOrderSummary]);
+  }, [isOpen, user, discountApplied, freeShippingApplied, forceUpdate, calculateOrderSummary]);
 
   const handleRedeemReward = async (reward) => {
     if (user.ecoPoints < reward.ecoPointsCost) {

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import config from '../config';
 import './RedeemModal.css';
 
@@ -11,9 +11,9 @@ const RedeemModal = ({ isOpen, onClose, user, token, onRefresh }) => {
     if (isOpen && user) {
       fetchAvailableRewards();
     }
-  }, [isOpen, user]);
+  }, [isOpen, user, fetchAvailableRewards]);
 
-  const fetchAvailableRewards = async () => {
+  const fetchAvailableRewards = useCallback(async () => {
     setLoading(true);
     try {
       const response = await fetch(
@@ -35,7 +35,7 @@ const RedeemModal = ({ isOpen, onClose, user, token, onRefresh }) => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [token]);
 
   const handleRedeem = async (reward) => {
     if (!user || user.ecoPoints < reward.ecoPointsCost) {

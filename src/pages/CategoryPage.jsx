@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import './CategoryPage.css';
 
@@ -10,9 +10,9 @@ const CategoryPage = ({ user, onAddToCart, onShowAuth }) => {
 
   useEffect(() => {
     fetchProducts();
-  }, [categoryName]);
+  }, [fetchProducts]);
 
-  const fetchProducts = async () => {
+  const fetchProducts = useCallback(async () => {
     try {
       setLoading(true);
       const response = await fetch('http://localhost:5001/api/products');
@@ -33,7 +33,7 @@ const CategoryPage = ({ user, onAddToCart, onShowAuth }) => {
       setError(err.message);
       setLoading(false);
     }
-  };
+  }, [categoryName]);
 
   const handleAddToCart = (product, isEcoAlternative) => {
     if (!user) {

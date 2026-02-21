@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import './ProductDetail.css';
 
@@ -10,9 +10,9 @@ const ProductDetail = ({ user, onAddToCart, onShowAuth }) => {
 
   useEffect(() => {
     fetchProduct();
-  }, [productId]);
+  }, [fetchProduct]);
 
-  const fetchProduct = async () => {
+  const fetchProduct = useCallback(async () => {
     try {
       setLoading(true);
       const response = await fetch('http://localhost:5001/api/products');
@@ -35,7 +35,7 @@ const ProductDetail = ({ user, onAddToCart, onShowAuth }) => {
       setError(err.message);
       setLoading(false);
     }
-  };
+  }, [productId]);
 
   const handleAddToCart = (isEcoAlternative) => {
     if (!user) {

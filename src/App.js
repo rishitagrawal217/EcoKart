@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import config from './config';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './index.css';
@@ -28,7 +28,7 @@ function App() {
   const [showRedeemModal, setShowRedeemModal] = useState(false);
   const [cartItems, setCartItems] = useState([]);
 
-  const refreshUserData = async () => {
+  const refreshUserData = useCallback(async () => {
     if (!token) return;
     
     try {
@@ -54,7 +54,7 @@ function App() {
     } catch (error) {
       console.error('Error refreshing user data:', error);
     }
-  };
+  }, [token]);
 
   useEffect(() => {
     // Check for existing auth on app load
@@ -68,7 +68,7 @@ function App() {
       // Refresh user data to ensure we have the latest EcoPoints
       refreshUserData();
     }
-  }, []); // Remove refreshUserData from dependency to avoid infinite loop
+  }, [refreshUserData]); // Add refreshUserData to dependency array
 
   const handleLogin = (userData, userToken) => {
     setUser(userData);

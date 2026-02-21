@@ -70,9 +70,9 @@ function markdownToHtml(md) {
   let inList = false;
   let result = '';
   for (let line of lines) {
-    if (/^([•\-])\s?/.test(line)) {
+    if (/^([•-])\s?/.test(line)) {
       if (!inList) { result += '<ul>'; inList = true; }
-      result += '<li>' + line.replace(/^([•\-])\s?/, '') + '</li>';
+      result += '<li>' + line.replace(/^([•-])\s?/, '') + '</li>';
     } else if (line.trim() === '') {
       if (inList) { result += '</ul>'; inList = false; }
       result += '';

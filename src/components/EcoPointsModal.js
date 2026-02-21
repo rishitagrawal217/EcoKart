@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import config from '../config';
 import './EcoPointsModal.css';
 
@@ -14,9 +14,9 @@ const EcoPointsModal = ({ isOpen, onClose, user, token, onRefresh }) => {
     if (isOpen && user) {
       fetchEcoPointsData();
     }
-  }, [isOpen, user]);
+  }, [isOpen, user, fetchEcoPointsData]);
 
-  const fetchEcoPointsData = async () => {
+  const fetchEcoPointsData = useCallback(async () => {
     setLoading(true);
     try {
       // Fetch balance
@@ -63,7 +63,7 @@ const EcoPointsModal = ({ isOpen, onClose, user, token, onRefresh }) => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [token]);
 
   const handleRedeemReward = async (reward) => {
     if (balance < reward.ecoPointsCost) {
