@@ -1,6 +1,6 @@
 const config = {
   // API URL for different environments
-  API_BASE_URL: process.env.REACT_APP_API_URL || 'http://localhost:5001',
+  API_BASE_URL: process.env.REACT_APP_API_URL || '',
   
   // Other configuration
   APP_NAME: 'EcoKart',
