@@ -17,7 +17,7 @@ const app = express();
 
 // CORS configuration for Netlify
 app.use(cors({
-  origin: process.env.URL || 'http://localhost:3000',
+  origin: true,
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization']
@@ -63,11 +63,11 @@ connectToDatabase();
 
 // Test endpoint
 app.get('/test', (req, res) => {
-  res.json({ message: 'Netlify backend is working!' });
+  res.json({ message: 'Netlify backend API is working!' });
 });
 
 app.get('/', (req, res) => {
-  res.send('EcoKart Netlify backend is running!');
+  res.json({ message: 'EcoKart Netlify API is running!' });
 });
 
 // Export as serverless function
